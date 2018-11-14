@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo --path
-  exec rbenv shims --short
+  exec phpenv shims --short
 fi
 
 if [ "$1" = "--path" ]; then
@@ -17,19 +17,19 @@ fi
 
 whence() {
   local command="$1"
-  rbenv-versions --bare | while read version; do
-    path="$(rbenv-prefix "$version")/bin/${command}"
+  phpenv-versions --bare | while read version; do
+    path="$(phpenv-prefix "$version")/bin/${command}"
     if [ -x "$path" ]; then
       [ "$print_paths" ] && echo "$path" || echo "$version"
     fi
   done
 }
 
-RBENV_COMMAND="$1"
-if [ -z "$RBENV_COMMAND" ]; then
-  echo "usage: rbenv whence [--path] COMMAND" >&2
+PHPENV_COMMAND="$1"
+if [ -z "$PHPENV_COMMAND" ]; then
+  echo "usage: phpenv whence [--path] COMMAND" >&2
   exit 1
 fi
 
-result="$(whence "$RBENV_COMMAND")"
+result="$(whence "$PHPENV_COMMAND")"
 [ -n "$result" ] && echo "$result"
