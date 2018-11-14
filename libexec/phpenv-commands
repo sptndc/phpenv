@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Summary: List all available rbenv commands
-# Usage: rbenv commands [--sh|--no-sh]
+# Summary: List all available phpenv commands
+# Usage: phpenv commands [--sh|--no-sh]
 
 set -e
 [ -n "$PHPENV_DEBUG" ] && set -x

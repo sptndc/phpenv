@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Summary: Show the current Ruby version and its origin
+# Summary: Show the current PHP version and its origin
 #
-# Shows the currently selected Ruby version and how it was
-# selected. To obtain only the version string, use `rbenv
+# Shows the currently selected PHP version and how it was
+# selected. To obtain only the version string, use `phpenv
 # version-name'.
 
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-echo "$(rbenv-version-name) (set by $(rbenv-version-origin))"
+echo "$(phpenv-version-name) (set by $(phpenv-version-origin))"
