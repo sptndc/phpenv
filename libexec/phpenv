@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
 resolve_link() {
   $(type -p greadlink readlink | head -1) $1
@@ -20,32 +20,32 @@ abs_dirname() {
   cd "$cwd"
 }
 
-if [ -z "${RBENV_ROOT}" ]; then
-  RBENV_ROOT="${HOME}/.rbenv"
+if [ -z "${PHPENV_ROOT}" ]; then
+  PHPENV_ROOT="${HOME}/.phpenv"
 else
-  RBENV_ROOT="${RBENV_ROOT%/}"
+  PHPENV_ROOT="${PHPENV_ROOT%/}"
 fi
-export RBENV_ROOT
+export PHPENV_ROOT
 
-if [ -z "${RBENV_DIR}" ]; then
-  RBENV_DIR="$(pwd)"
+if [ -z "${PHPENV_DIR}" ]; then
+  PHPENV_DIR="$(pwd)"
 fi
-export RBENV_DIR
+export PHPENV_DIR
 
 
 shopt -s nullglob
 
 bin_path="$(abs_dirname "$0")"
-for plugin_bin in "${RBENV_ROOT}/plugins/"*/bin; do
+for plugin_bin in "${PHPENV_ROOT}/plugins/"*/bin; do
   bin_path="${bin_path}:${plugin_bin}"
 done
 export PATH="${bin_path}:${PATH}"
 
-hook_path="${RBENV_HOOK_PATH}:${RBENV_ROOT}/rbenv.d:/usr/local/etc/rbenv.d:/etc/rbenv.d"
-for plugin_hook in "${RBENV_ROOT}/plugins/"*/etc/rbenv.d; do
+hook_path="${PHPENV_HOOK_PATH}:${PHPENV_ROOT}/phpenv.d:/usr/local/etc/phpenv.d:/etc/phpenv.d"
+for plugin_hook in "${PHPENV_ROOT}/plugins/"*/etc/phpenv.d; do
   hook_path="${hook_path}:${plugin_hook}"
 done
-export RBENV_HOOK_PATH="$hook_path"
+export PHPENV_HOOK_PATH="$hook_path"
 
 shopt -u nullglob
 
@@ -53,12 +53,12 @@ shopt -u nullglob
 command="$1"
 case "$command" in
 "" | "-h" | "--help" )
-  echo -e "rbenv 0.2.0\n$(rbenv-help)" >&2
+  echo -e "phpenv 0.1.2\n$(phpenv-help)" >&2
   ;;
 * )
-  command_path="$(command -v "rbenv-$command" || true)"
+  command_path="$(command -v "phpenv-$command" || true)"
   if [ -z "$command_path" ]; then
-    echo "rbenv: no such command \`$command'" >&2
+    echo "phpenv: no such command \`$command'" >&2
     exit 1
   fi
 
