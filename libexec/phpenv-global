@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo system
-  exec rbenv-versions --bare
+  exec phpenv-versions --bare
 fi
 
-RBENV_VERSION="$1"
-RBENV_VERSION_FILE="${RBENV_ROOT}/version"
+PHPENV_VERSION="$1"
+PHPENV_VERSION_FILE="${PHPENV_ROOT}/version"
 
-if [ -n "$RBENV_VERSION" ]; then
-  rbenv-version-file-write "$RBENV_VERSION_FILE" "$RBENV_VERSION"
+if [ -n "$PHPENV_VERSION" ]; then
+  phpenv-version-file-write "$PHPENV_VERSION_FILE" "$PHPENV_VERSION"
 else
-  rbenv-version-file-read "$RBENV_VERSION_FILE" ||
-  rbenv-version-file-read "${RBENV_ROOT}/global" ||
-  rbenv-version-file-read "${RBENV_ROOT}/default" ||
+  phpenv-version-file-read "$PHPENV_VERSION_FILE" ||
+  phpenv-version-file-read "${PHPENV_ROOT}/global" ||
+  phpenv-version-file-read "${PHPENV_ROOT}/default" ||
   echo system
 fi

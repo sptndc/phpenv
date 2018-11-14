@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo --unset
   echo system
-  exec rbenv-versions --bare
+  exec phpenv-versions --bare
 fi
 
-RBENV_VERSION="$1"
-RBENV_VERSION_FILE=".rbenv-version"
+PHPENV_VERSION="$1"
+PHPENV_VERSION_FILE=".phpenv-version"
 
-if [ "$RBENV_VERSION" = "--unset" ]; then
-  rm -f "$RBENV_VERSION_FILE"
-elif [ -n "$RBENV_VERSION" ]; then
-  rbenv-version-file-write "$RBENV_VERSION_FILE" "$RBENV_VERSION"
+if [ "$PHPENV_VERSION" = "--unset" ]; then
+  rm -f "$PHPENV_VERSION_FILE"
+elif [ -n "$PHPENV_VERSION" ]; then
+  phpenv-version-file-write "$PHPENV_VERSION_FILE" "$PHPENV_VERSION"
 else
-  rbenv-version-file-read "$RBENV_VERSION_FILE" ||
-  { echo "rbenv: no local version configured for this directory"
+  phpenv-version-file-read "$PHPENV_VERSION_FILE" ||
+  { echo "phpenv: no local version configured for this directory"
     exit 1
   } >&2
 fi
