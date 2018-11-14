@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-RBENV_VERSION="$1"
-if [ -z "$RBENV_VERSION" ]; then
-  echo "usage: rbenv set-local VERSION" >&2
+PHPENV_VERSION="$1"
+if [ -z "$PHPENV_VERSION" ]; then
+  echo "usage: phpenv set-local VERSION" >&2
   exit 1
 fi
 
 # Make sure the specified version is installed
-rbenv-prefix "$RBENV_VERSION" >/dev/null
+phpenv-prefix "$PHPENV_VERSION" >/dev/null
 
-echo "$RBENV_VERSION" > .rbenv-version
+echo "$PHPENV_VERSION" > .phpenv-version

@@ -2,12 +2,12 @@
 set -e
 
 create_prototype_shim() {
-  cat > .rbenv-shim <<SH
+  cat > .phpenv-shim <<SH
 #!/usr/bin/env bash
 set -e
-exec rbenv exec "\${0##*/}" "\$@"
+exec phpenv exec "\${0##*/}" "\$@"
 SH
-  chmod +x .rbenv-shim
+  chmod +x .phpenv-shim
 }
 
 make_shims() {
@@ -15,23 +15,23 @@ make_shims() {
 
   for file in $glob; do
     local shim="${file##*/}"
-    [ -e "$shim" ] || ln -f .rbenv-shim "$shim"
+    [ -e "$shim" ] || ln -f .phpenv-shim "$shim"
   done
 }
 
-mkdir -p "${HOME}/.rbenv/shims"
-cd "${HOME}/.rbenv/shims"
+mkdir -p "${HOME}/.phpenv/shims"
+cd "${HOME}/.phpenv/shims"
 rm -f *
 
 create_prototype_shim
 make_shims ../versions/*/bin/*
 
 shopt -s nullglob
-RBENV_REHASH_PLUGINS=(/etc/rbenv.d/rehash/*.bash ${HOME}/.rbenv/rbenv.d/rehash/*.bash)
+PHPENV_REHASH_PLUGINS=(/etc/phpenv.d/rehash/*.bash ${HOME}/.phpenv/phpenv.d/rehash/*.bash)
 shopt -u nullglob
 
-for script in ${RBENV_REHASH_PLUGINS[@]}; do
+for script in ${PHPENV_REHASH_PLUGINS[@]}; do
   source $script
 done
 
-rm -f .rbenv-shim
+rm -f .phpenv-shim
