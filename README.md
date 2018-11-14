@@ -137,7 +137,8 @@ tag:
     v0.1.2
     v0.2.0
     v0.2.1
-    $ git checkout v0.2.1
+    v0.3.0
+    $ git checkout v0.3.0
 
 ### <a name="section_2.2"></a> 2.2 Neckbeard Configuration
 
