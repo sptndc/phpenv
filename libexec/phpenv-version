@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+echo "$(phpenv-version-name) (set by $(phpenv-version-origin))"

@@ -1,40 +1,32 @@
-# Simple Ruby Version Management: rbenv
+# Simple PHP Version Management: phpenv
 
-<img src="http://i.sstephenson.us/rbenv.png" width="894" height="464">
-
-rbenv lets you easily switch between multiple versions of Ruby. It's
+phpenv lets you easily switch between multiple versions of PHP. It's
 simple, unobtrusive, and follows the UNIX tradition of single-purpose
 tools that do one thing well.
 
-### rbenv _does…_
+This project was forked from [rbenv](https://github.com/rbenv/rbenv),
+and modified for PHP.
 
-* Let you **change the default Ruby version** on a per-user basis.
-* Provide support for **per-project Ruby versions**.
-* Allow you to **override the Ruby version** with an environment
+### phpenv _does…_
+
+* Let you **change the default PHP version** on a per-user basis.
+* Provide support for **per-project PHP versions**.
+* Allow you to **override the PHP version** with an environment
   variable.
 
-### In contrast with rvm, rbenv _does not…_
+### In contrast with phpbrew, phpenv _does not…_
 
-* **Need to be loaded into your shell.** Instead, rbenv's shim
+* **Depend on PHP itself.** phpenv was made from pure shell scripts.
+    There is no bootstrap problem of PHP.
+* **Need to be loaded into your shell.** Instead, phpenv's shim
     approach works by adding a directory to your `$PATH`.
 * **Override shell commands like `cd`.** That's dangerous and
     error-prone.
-* **Have a configuration file.** There's nothing to configure except
-    which version of Ruby you want to use.
-* **Install Ruby.** You can build and install Ruby yourself, or use
-    [ruby-build](https://github.com/sstephenson/ruby-build) to
+* **Install PHP.** You can build and install PHP yourself, or use
+    [php-build](https://github.com/sptndc/php-build) to
     automate the process.
-* **Manage gemsets.** [Bundler](http://gembundler.com/) is a better
-    way to manage application dependencies. If you have projects that
-    are not yet using Bundler you can install the
-    [rbenv-gemset](https://github.com/jamis/rbenv-gemset) plugin.
-* **Require changes to Ruby libraries for compatibility.** The
-    simplicity of rbenv means as long as it's in your `$PATH`,
-    [nothing](https://rvm.beginrescueend.com/integration/bundler/)
-    [else](https://rvm.beginrescueend.com/integration/capistrano/)
-    needs to know about it.
 * **Prompt you with warnings when you switch to a project.** Instead
-    of executing arbitrary code, rbenv reads just the version name
+    of executing arbitrary code, phpenv reads just the version name
     from each project. There's nothing to "trust."
 
 ## Table of Contents
@@ -52,140 +44,132 @@ tools that do one thing well.
 
 ## <a name="section_1"></a> 1 How It Works
 
-rbenv operates on the per-user directory `~/.rbenv`. Version names in
-rbenv correspond to subdirectories of `~/.rbenv/versions`. For
-example, you might have `~/.rbenv/versions/1.8.7-p354` and
-`~/.rbenv/versions/1.9.3-preview1`.
+phpenv operates on the per-user directory `~/.phpenv`. Version names in
+phpenv correspond to subdirectories of `~/.phpenv/versions`. For
+example, you might have `~/.phpenv/versions/7.0.32` and
+`~/.phpenv/versions/7.2.11`.
 
 Each version is a working tree with its own binaries, like
-`~/.rbenv/versions/1.8.7-p354/bin/ruby` and
-`~/.rbenv/versions/1.9.3-preview1/irb`. rbenv makes _shim binaries_
-for every such binary across all installed versions of Ruby.
+`~/.phpenv/versions/7.0.32/bin/php` and
+`~/.phpenv/versions/7.2.11/bin/php`. phpenv makes _shim binaries_
+for every such binary across all installed versions of PHP.
 
-These shims are simple wrapper scripts that live in `~/.rbenv/shims`
-and detect which Ruby version you want to use. They insert the
+These shims are simple wrapper scripts that live in `~/.phpenv/shims`
+and detect which PHP version you want to use. They insert the
 directory for the selected version at the beginning of your `$PATH`
 and then execute the corresponding binary.
 
 Because of the simplicity of the shim approach, all you need to use
-rbenv is `~/.rbenv/shims` in your `$PATH`.
+phpenv is `~/.phpenv/shims` in your `$PATH`.
 
 ## <a name="section_2"></a> 2 Installation
 
-rbenv is a young project, so for now you must install it from source.
+phpenv is a young project, so for now you must install it from source.
 
-**Compatibility note**: rbenv is _incompatible_ with rvm. Things will
-  appear to work until you try to install a gem. The problem is that
-  rvm actually overrides the `gem` command with a shell function!
-  Please remove any references to rvm before using rbenv.
-
-1. Check out rbenv into `~/.rbenv`.
+1. Check out phpenv into `~/.phpenv`.
 
         $ cd
-        $ git clone git://github.com/sstephenson/rbenv.git .rbenv
+        $ git clone git://github.com/sptndc/phpenv.git .phpenv
 
-2. Add `~/.rbenv/bin` to your `$PATH` for access to the `rbenv`
-command-line utility.
+2. Add `~/.phpenv/bin` to your `$PATH` for access to the `phpenv`
+   command-line utility.
 
-        $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> .bash_profile
+        $ echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> .bash_profile
 
-3. Add rbenv's shims directory to your `$PATH` and set up Bash
-autocompletion. (If you prefer not to load rbenv in your shell, you
-can manually add `$HOME/.rbenv/shims` to your path in step 2.)
+3. Add phpenv's shims directory to your `$PATH` and set up Bash
+   autocompletion. (If you prefer not to load phpenv in your shell, you
+   can manually add `$HOME/.phpenv/shims` to your path in step 2.)
 
-        $ echo 'eval "$(rbenv init -)"' >> .bash_profile
+        $ echo 'eval "$(phpenv init -)"' >> .bash_profile
 
-4. Restart your shell. You can now begin using rbenv.
+4. Restart your shell. You can now begin using phpenv.
 
         $ exec
 
-5. Install Ruby versions into `~/.rbenv/versions`. For example, to
-install Ruby 1.9.2-p290, download and unpack the source, then run:
+5. Install PHP versions into `~/.phpenv/versions`. For example, to
+   install PHP 7.1.23, download and unpack the source, then run:
 
-        $ ./configure --prefix=$HOME/.rbenv/versions/1.9.2-p290
+        $ ./configure --prefix=$HOME/.phpenv/versions/7.1.23
         $ make
         $ make install
 
-    The [ruby-build](https://github.com/sstephenson/ruby-build)
+    The [php-build](https://github.com/sptndc/php-build)
     project simplifies this process to a single command:
 
-        $ ruby-build 1.9.2-p290 $HOME/.rbenv/versions/1.9.2-p290
+        $ php-build 7.1.23 $HOME/.phpenv/versions/7.1.23
 
 6. Rebuild the shim binaries. You should do this any time you install
-a new Ruby binary (for example, when installing a new Ruby version, or
-when installing a gem that provides a binary).
+   a new PHP binary (for example, when installing a new PHP version).
 
-        $ rbenv rehash
+        $ phpenv rehash
 
 ## <a name="section_3"></a> 3 Usage
 
-Like `git`, the `rbenv` command delegates to subcommands based on its
+Like `git`, the `phpenv` command delegates to subcommands based on its
 first argument. The most common subcommands are:
 
 ### <a name="section_3.1"></a> 3.1 set-default
 
-Sets the default version of Ruby to be used in all shells by writing
-the version name to the `~/.rbenv/default` file. This version can be
-overridden by a per-project `.rbenv-version` file, or by setting the
-`RBENV_VERSION` environment variable.
+Sets the default version of PHP to be used in all shells by writing
+the version name to the `~/.phpenv/default` file. This version can be
+overridden by a per-project `.phpenv-version` file, or by setting the
+`PHPENV_VERSION` environment variable.
 
-    $ rbenv set-default 1.9.2-p290
+    $ phpenv set-default 7.1.23
 
-The special version name `system` tells rbenv to use the system Ruby
+The special version name `system` tells phpenv to use the system PHP
 (detected by searching your `$PATH`).
 
 ### <a name="section_3.2"></a> 3.2 set-local
 
-Sets a local per-project Ruby version by writing the version name to
-an `.rbenv-version` file in the current directory. This version
+Sets a local per-project PHP version by writing the version name to
+an `.phpenv-version` file in the current directory. This version
 overrides the default, and can be overridden itself by setting the
-`RBENV_VERSION` environment variable.
+`PHPENV_VERSION` environment variable.
 
-    $ rbenv set-local rbx-1.2.4
+    $ phpenv set-local 7.0.32
 
 ### <a name="section_3.3"></a> 3.3 versions
 
-Lists all Ruby versions known to rbenv, and shows an asterisk next to
+Lists all PHP versions known to phpenv, and shows an asterisk next to
 the currently active version.
 
-    $ rbenv versions
-      1.8.7-p352
-      1.9.2-p290
-    * 1.9.3-preview1 (set by /Users/sam/.rbenv/default)
-      jruby-1.6.3
-      rbx-1.2.4
-      ree-1.8.7-2011.03
+    $ phpenv versions
+      7.0.23
+      7.1.23
+    * 7.2.11 (set by /YOUR-USERNAME/.phpenv/default)
 
 ### <a name="section_3.4"></a> 3.4 version
 
-Displays the currently active Ruby version, along with information on
+Displays the currently active PHP version, along with information on
 how it was set.
 
-    $ rbenv version
-    1.8.7-p352 (set by /Volumes/37signals/basecamp/.rbenv-version)
+    $ phpenv version
+    7.0.32 (set by /YOUR-PROJECT/.phpenv-version)
 
 ### <a name="section_3.5"></a> 3.5 rehash
 
-Installs shims for all Ruby binaries known to rbenv (i.e.,
-`~/.rbenv/versions/*/bin/*`). Run this command after you install a new
-version of Ruby, or install a gem that provides binaries.
+Installs shims for all PHP binaries known to phpenv (i.e.,
+`~/.phpenv/versions/*/bin/*`). Run this command after you install a new
+version of PHP.
 
-    $ rbenv rehash
+    $ phpenv rehash
 
 ## <a name="section_4"></a> 4 Contributing
 
-The rbenv source code is [hosted on
-GitHub](https://github.com/sstephenson/rbenv). It's clean, modular,
+The phpenv source code is [hosted on
+GitHub](https://github.com/sptndc/phpenv). It's clean, modular,
 and easy to understand, even if you're not a shell hacker.
 
 Please feel free to submit pull requests and file bugs on the [issue
-tracker](https://github.com/sstephenson/rbenv/issues).
+tracker](https://github.com/sptndc/phpenv/issues).
 
 ### <a name="section_4.1"></a> 4.1 License
 
 (The MIT license)
 
-Copyright (c) 2011 Sam Stephenson
+Copyright (c) 2018 Septian Dwic.\
+Copyright (c) 2011-2013 Sam Stephenson
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+PHPENV_VERSION="$1"
+if [ -z "$PHPENV_VERSION" ]; then
+  echo "usage: phpenv set-default VERSION" >&2
+  exit 1
+fi
+
+# Make sure the specified version is installed
+phpenv-prefix "$PHPENV_VERSION" >/dev/null
+
+echo "$PHPENV_VERSION" > "${HOME}/.phpenv/default"

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -e
+
+print_set_version() {
+  echo "<version> should be a string matching a PHP version known by phpenv."
+
+  local versions="$(phpenv-versions --bare)"
+  if [ -z "$versions" ]; then
+    echo "There are currently no PHP versions installed for phpenv."
+  else
+    echo "The currently installed PHP versions are:"
+    echo "$versions" | sed 's/^/  /'
+  fi
+
+  echo
+  echo "The special version string 'system' will use your default system PHP."
+}
+
+case "$1" in
+"") echo "usage: phpenv <command> [<args>]
+
+Some useful phpenv commands are:
+   commands      List all commands
+   rehash        Rehash phpenv shims (run this after installing binaries)
+   set-default   Set the default PHP version
+   set-local     Set a local directory-specific PHP version
+   version       Show the current PHP version
+   versions      List all PHP versions known by phpenv
+
+See 'phpenv help <command>' for more information on a specific command.
+For more information, see: https://github.com/sptndc/phpenv#readme"
+;;
+set-default) echo "usage: phpenv set-default <version>
+
+Sets the default PHP version. You can override the default at any time
+by setting a directory-specific version with \`phpenv set-local' or by
+setting the PHPENV_VERSION environment variable.
+
+$(print_set_version)"
+;;
+set-local) echo "usage: phpenv set-local <version>
+
+Sets the local directory-specific PHP version by writing the version
+name to a file named '.phpenv-version'.
+
+When you run a PHP command, phpenv will look for an '.phpenv-version'
+file in the current directory and each parent directory. If no such
+file is found in the tree, phpenv will use the default PHP version
+specified with \`phpenv set-default', or the version specified in the
+PHPENV_VERSION environment variable.
+
+$(print_set_version)"
+;;
+*) echo "No command arguments needed or invalid/undocumented command."
+esac

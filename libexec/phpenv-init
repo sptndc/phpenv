@@ -41,24 +41,24 @@ if [ -z "$print" ]; then
     ;;
   esac
 
-  { echo "# Load rbenv automatically by adding"
+  { echo "# Load phpenv automatically by adding"
     echo "# the following to ${profile}:"
     echo
-    echo 'eval "$(rbenv init -)"'
+    echo 'eval "$(phpenv init -)"'
     echo
   } >&2
 
   exit 1
 fi
 
-mkdir -p "${HOME}/.rbenv/"{shims,versions}
+mkdir -p "${HOME}/.phpenv/"{shims,versions}
 
-echo 'export PATH="${HOME}/.rbenv/shims:${PATH}"'
+echo 'export PATH="${HOME}/.phpenv/shims:${PATH}"'
 
 case "$shell" in
 bash | zsh )
-  echo "source \"$root/completions/rbenv.${shell}\""
+  echo "source \"$root/completions/phpenv.${shell}\""
   ;;
 esac
 
-echo 'rbenv rehash 2>/dev/null'
+echo 'phpenv rehash 2>/dev/null'

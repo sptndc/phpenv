@@ -4,8 +4,8 @@ set -e
 find_version_file() {
   local root="$(pwd)"
   while [ -n "$root" ]; do
-    if [ -e "${root}/.rbenv-version" ]; then
-      echo "${root}/.rbenv-version"
+    if [ -e "${root}/.phpenv-version" ]; then
+      echo "${root}/.phpenv-version"
       return 0
     fi
     root="${root%/*}"
@@ -13,7 +13,7 @@ find_version_file() {
   return 1
 }
 
-DEFAULT_PATH="${HOME}/.rbenv/default"
+DEFAULT_PATH="${HOME}/.phpenv/default"
 
 find_default_version_file() {
   if [ -e "$DEFAULT_PATH" ]; then
@@ -23,8 +23,8 @@ find_default_version_file() {
   return 1
 }
 
-if [ -z "$RBENV_VERSION" ]; then
+if [ -z "$PHPENV_VERSION" ]; then
   find_version_file || find_default_version_file || true
 else
-  echo "RBENV_VERSION environment variable"
+  echo "PHPENV_VERSION environment variable"
 fi
