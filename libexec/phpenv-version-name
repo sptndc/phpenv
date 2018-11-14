@@ -13,29 +13,29 @@ read_version_file() {
   done < "$1"
 }
 
-DEFAULT_PATH="${HOME}/.rbenv/default"
+DEFAULT_PATH="${HOME}/.phpenv/default"
 
-if [ -z "$RBENV_VERSION" ]; then
-  RBENV_VERSION_FILE="$(rbenv-version-origin)"
+if [ -z "$PHPENV_VERSION" ]; then
+  PHPENV_VERSION_FILE="$(phpenv-version-origin)"
 
-  if [ -n "$RBENV_VERSION_FILE" ]; then
-    RBENV_VERSION="$(read_version_file "$RBENV_VERSION_FILE")"
+  if [ -n "$PHPENV_VERSION_FILE" ]; then
+    PHPENV_VERSION="$(read_version_file "$PHPENV_VERSION_FILE")"
   else
     echo system > "$DEFAULT_PATH"
-    RBENV_VERSION=system
+    PHPENV_VERSION=system
   fi
 fi
 
-if [ "$RBENV_VERSION" = "system" ]; then
-  echo "$RBENV_VERSION"
+if [ "$PHPENV_VERSION" = "system" ]; then
+  echo "$PHPENV_VERSION"
   exit
 fi
 
-RBENV_VERSION_PATH="${HOME}/.rbenv/versions/${RBENV_VERSION}"
+PHPENV_VERSION_PATH="${HOME}/.phpenv/versions/${PHPENV_VERSION}"
 
-if [ -d "$RBENV_VERSION_PATH" ]; then
-  echo "$RBENV_VERSION"
+if [ -d "$PHPENV_VERSION_PATH" ]; then
+  echo "$PHPENV_VERSION"
 else
-  echo "rbenv: version \`$RBENV_VERSION' is not installed" >&2
+  echo "phpenv: version \`$PHPENV_VERSION' is not installed" >&2
   exit 1
 fi

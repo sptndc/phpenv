@@ -26,33 +26,33 @@ remove_from_path() {
   echo "${result%:}"
 }
 
-RBENV_VERSION="$(rbenv-version-name)"
-RBENV_COMMAND="$1"
+PHPENV_VERSION="$(phpenv-version-name)"
+PHPENV_COMMAND="$1"
 
-if [ "$RBENV_VERSION" = "system" ]; then
-  PATH="$(remove_from_path "${HOME}/.rbenv/shims")"
-  RBENV_COMMAND_PATH="$(command -v "$RBENV_COMMAND")"
+if [ "$PHPENV_VERSION" = "system" ]; then
+  PATH="$(remove_from_path "${HOME}/.phpenv/shims")"
+  PHPENV_COMMAND_PATH="$(command -v "$PHPENV_COMMAND")"
 else
-  RBENV_COMMAND_PATH="${HOME}/.rbenv/versions/${RBENV_VERSION}/bin/${RBENV_COMMAND}"
+  PHPENV_COMMAND_PATH="${HOME}/.phpenv/versions/${PHPENV_VERSION}/bin/${PHPENV_COMMAND}"
 fi
 
 shopt -s nullglob
-RBENV_WHICH_PLUGINS=(/etc/rbenv.d/which/*.bash ${HOME}/.rbenv/rbenv.d/which/*.bash)
+PHPENV_WHICH_PLUGINS=(/etc/phpenv.d/which/*.bash ${HOME}/.phpenv/phpenv.d/which/*.bash)
 shopt -u nullglob
 
-for script in ${RBENV_WHICH_PLUGINS[@]}; do
+for script in ${PHPENV_WHICH_PLUGINS[@]}; do
   source $script
 done
 
-if [ -x "$RBENV_COMMAND_PATH" ]; then
-  echo "$RBENV_COMMAND_PATH"
+if [ -x "$PHPENV_COMMAND_PATH" ]; then
+  echo "$PHPENV_COMMAND_PATH"
 else
-  echo "rbenv: $RBENV_COMMAND: command not found" >&2
+  echo "phpenv: $PHPENV_COMMAND: command not found" >&2
 
-  versions="$(rbenv-whence "$RBENV_COMMAND" || true)"
+  versions="$(phpenv-whence "$PHPENV_COMMAND" || true)"
   if [ -n "$versions" ]; then
     { echo
-      echo "The \`$1' command exists in these Ruby versions:"
+      echo "The \`$1' command exists in these PHP versions:"
       echo "$versions" | sed 's/^/  /g'
       echo
     } >&2
