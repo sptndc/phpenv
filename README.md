@@ -206,7 +206,7 @@ To use a specific release of phpenv, check out the corresponding tag:
 ~~~ sh
 $ cd ~/.phpenv
 $ git fetch
-$ git checkout v0.3.0
+$ git checkout v0.4.0
 ~~~
 
 ### Neckbeard Configuration
