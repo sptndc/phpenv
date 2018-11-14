@@ -3,15 +3,15 @@
 # Usage: rbenv shims [--short]
 
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo --short
   exit
 fi
 
-for command in "${RBENV_ROOT}/shims/"*; do
+for command in "${PHPENV_ROOT}/shims/"*; do
   if [ "$1" = "--short" ]; then
     echo "${command##*/}"
   else
