@@ -196,7 +196,7 @@ To use a specific release of phpenv, check out the corresponding tag:
 ~~~ sh
 $ cd ~/.phpenv
 $ git fetch
-$ git checkout v1.0.0
+$ git checkout v1.1.0
 ~~~
 
 ### How phpenv hooks into your shell
