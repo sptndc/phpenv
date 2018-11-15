@@ -26,14 +26,14 @@ load test_helper
 
 @test "prefix for system in /" {
   mkdir -p "${BATS_TEST_DIRNAME}/libexec"
-  cat >"${BATS_TEST_DIRNAME}/libexec/rbenv-which" <<OUT
+  cat >"${BATS_TEST_DIRNAME}/libexec/phpenv-which" <<OUT
 #!/bin/sh
-echo /bin/ruby
+echo /bin/php
 OUT
-  chmod +x "${BATS_TEST_DIRNAME}/libexec/rbenv-which"
-  RBENV_VERSION="system" run rbenv-prefix
+  chmod +x "${BATS_TEST_DIRNAME}/libexec/phpenv-which"
+  PHPENV_VERSION="system" run phpenv-prefix
   assert_success "/"
-  rm -f "${BATS_TEST_DIRNAME}/libexec/rbenv-which"
+  rm -f "${BATS_TEST_DIRNAME}/libexec/phpenv-which"
 }
 
 @test "prefix for invalid system" {

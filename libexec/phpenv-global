@@ -1,31 +1,31 @@
 #!/usr/bin/env bash
 #
-# Summary: Set or show the global Ruby version
+# Summary: Set or show the global PHP version
 #
-# Usage: rbenv global <version>
+# Usage: phpenv global <version>
 #
-# Sets the global Ruby version. You can override the global version at
-# any time by setting a directory-specific version with `rbenv local'
-# or by setting the `RBENV_VERSION' environment variable.
+# Sets the global PHP version. You can override the global version at
+# any time by setting a directory-specific version with `phpenv local'
+# or by setting the `PHPENV_VERSION' environment variable.
 #
-# <version> should be a string matching a Ruby version known to rbenv.
-# The special version string `system' will use your default system Ruby.
-# Run `rbenv versions' for a list of available Ruby versions.
+# <version> should be a string matching a PHP version known to phpenv.
+# The special version string `system' will use your default system PHP.
+# Run `phpenv versions' for a list of available PHP versions.
 
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo system
-  exec rbenv-versions --bare
+  exec phpenv-versions --bare
 fi
 
-RBENV_VERSION="$1"
-RBENV_VERSION_FILE="${RBENV_ROOT}/version"
+PHPENV_VERSION="$1"
+PHPENV_VERSION_FILE="${PHPENV_ROOT}/version"
 
-if [ -n "$RBENV_VERSION" ]; then
-  rbenv-version-file-write "$RBENV_VERSION_FILE" "$RBENV_VERSION"
+if [ -n "$PHPENV_VERSION" ]; then
+  phpenv-version-file-write "$PHPENV_VERSION_FILE" "$PHPENV_VERSION"
 else
-  rbenv-version-file-read "$RBENV_VERSION_FILE" || echo system
+  phpenv-version-file-read "$PHPENV_VERSION_FILE" || echo system
 fi

@@ -1,43 +1,43 @@
 #!/usr/bin/env bash
 #
-# Summary: Set or show the shell-specific Ruby version
+# Summary: Set or show the shell-specific PHP version
 #
-# Usage: rbenv shell <version>
-#        rbenv shell -
-#        rbenv shell --unset
+# Usage: phpenv shell <version>
+#        phpenv shell -
+#        phpenv shell --unset
 #
-# Sets a shell-specific Ruby version by setting the `RBENV_VERSION'
+# Sets a shell-specific PHP version by setting the `PHPENV_VERSION'
 # environment variable in your shell. This version overrides local
 # application-specific versions and the global version.
 #
-# <version> should be a string matching a Ruby version known to rbenv.
-# The special version string `system' will use your default system Ruby.
-# Run `rbenv versions' for a list of available Ruby versions.
+# <version> should be a string matching a PHP version known to phpenv.
+# The special version string `system' will use your default system PHP.
+# Run `phpenv versions' for a list of available PHP versions.
 #
 # When `-` is passed instead of the version string, the previously set
-# version will be restored. With `--unset`, the `RBENV_VERSION`
+# version will be restored. With `--unset`, the `PHPENV_VERSION`
 # environment variable gets unset, restoring the environment to the
-# state before the first `rbenv shell` call.
+# state before the first `phpenv shell` call.
 
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo --unset
   echo system
-  exec rbenv-versions --bare
+  exec phpenv-versions --bare
 fi
 
 version="$1"
-shell="$(basename "${RBENV_SHELL:-$SHELL}")"
+shell="$(basename "${PHPENV_SHELL:-$SHELL}")"
 
 if [ -z "$version" ]; then
-  if [ -z "$RBENV_VERSION" ]; then
-    echo "rbenv: no shell-specific version configured" >&2
+  if [ -z "$PHPENV_VERSION" ]; then
+    echo "phpenv: no shell-specific version configured" >&2
     exit 1
   else
-    echo 'echo "$RBENV_VERSION"'
+    echo 'echo "$PHPENV_VERSION"'
     exit
   fi
 fi
@@ -45,12 +45,12 @@ fi
 if [ "$version" = "--unset" ]; then
   case "$shell" in
   fish )
-    echo 'set -gu OLD_RBENV_VERSION "$RBENV_VERSION"'
-    echo "set -e RBENV_VERSION"
+    echo 'set -gu OLD_PHPENV_VERSION "$PHPENV_VERSION"'
+    echo "set -e PHPENV_VERSION"
     ;;
   * )
-    echo 'OLD_RBENV_VERSION="$RBENV_VERSION"'
-    echo "unset RBENV_VERSION"
+    echo 'OLD_PHPENV_VERSION="$PHPENV_VERSION"'
+    echo "unset PHPENV_VERSION"
     ;;
   esac
   exit
@@ -60,36 +60,36 @@ if [ "$version" = "-" ]; then
   case "$shell" in
   fish )
     cat <<EOS
-if set -q OLD_RBENV_VERSION
-  if [ -n "\$OLD_RBENV_VERSION" ]
-    set OLD_RBENV_VERSION_ "\$RBENV_VERSION"
-    set -gx RBENV_VERSION "\$OLD_RBENV_VERSION"
-    set -gu OLD_RBENV_VERSION "\$OLD_RBENV_VERSION_"
-    set -e OLD_RBENV_VERSION_
+if set -q OLD_PHPENV_VERSION
+  if [ -n "\$OLD_PHPENV_VERSION" ]
+    set OLD_PHPENV_VERSION_ "\$PHPENV_VERSION"
+    set -gx PHPENV_VERSION "\$OLD_PHPENV_VERSION"
+    set -gu OLD_PHPENV_VERSION "\$OLD_PHPENV_VERSION_"
+    set -e OLD_PHPENV_VERSION_
   else
-    set -gu OLD_RBENV_VERSION "\$RBENV_VERSION"
-    set -e RBENV_VERSION
+    set -gu OLD_PHPENV_VERSION "\$PHPENV_VERSION"
+    set -e PHPENV_VERSION
   end
 else
-  echo "rbenv: OLD_RBENV_VERSION is not set" >&2
+  echo "phpenv: OLD_PHPENV_VERSION is not set" >&2
   false
 end
 EOS
     ;;
   * )
     cat <<EOS
-if [ -n "\${OLD_RBENV_VERSION+x}" ]; then
-  if [ -n "\$OLD_RBENV_VERSION" ]; then
-    OLD_RBENV_VERSION_="\$RBENV_VERSION"
-    export RBENV_VERSION="\$OLD_RBENV_VERSION"
-    OLD_RBENV_VERSION="\$OLD_RBENV_VERSION_"
-    unset OLD_RBENV_VERSION_
+if [ -n "\${OLD_PHPENV_VERSION+x}" ]; then
+  if [ -n "\$OLD_PHPENV_VERSION" ]; then
+    OLD_PHPENV_VERSION_="\$PHPENV_VERSION"
+    export PHPENV_VERSION="\$OLD_PHPENV_VERSION"
+    OLD_PHPENV_VERSION="\$OLD_PHPENV_VERSION_"
+    unset OLD_PHPENV_VERSION_
   else
-    OLD_RBENV_VERSION="\$RBENV_VERSION"
-    unset RBENV_VERSION
+    OLD_PHPENV_VERSION="\$PHPENV_VERSION"
+    unset PHPENV_VERSION
   fi
 else
-  echo "rbenv: OLD_RBENV_VERSION is not set" >&2
+  echo "phpenv: OLD_PHPENV_VERSION is not set" >&2
   false
 fi
 EOS
@@ -99,16 +99,16 @@ EOS
 fi
 
 # Make sure the specified version is installed.
-if rbenv-prefix "$version" >/dev/null; then
-  if [ "$version" != "$RBENV_VERSION" ]; then
+if phpenv-prefix "$version" >/dev/null; then
+  if [ "$version" != "$PHPENV_VERSION" ]; then
     case "$shell" in
     fish )
-      echo 'set -gu OLD_RBENV_VERSION "$RBENV_VERSION"'
-      echo "set -gx RBENV_VERSION \"$version\""
+      echo 'set -gu OLD_PHPENV_VERSION "$PHPENV_VERSION"'
+      echo "set -gx PHPENV_VERSION \"$version\""
       ;;
     * )
-      echo 'OLD_RBENV_VERSION="$RBENV_VERSION"'
-      echo "export RBENV_VERSION=\"$version\""
+      echo 'OLD_PHPENV_VERSION="$PHPENV_VERSION"'
+      echo "export PHPENV_VERSION=\"$version\""
       ;;
     esac
   fi

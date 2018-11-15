@@ -1,42 +1,42 @@
 #!/usr/bin/env bash
-# Summary: Display prefix for a Ruby version
-# Usage: rbenv prefix [<version>]
+# Summary: Display prefix for a PHP version
+# Usage: phpenv prefix [<version>]
 #
-# Displays the directory where a Ruby version is installed. If no
-# version is given, `rbenv prefix' displays the location of the
+# Displays the directory where a PHP version is installed. If no
+# version is given, `phpenv prefix' displays the location of the
 # currently selected version.
 
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
   echo system
-  exec rbenv-versions --bare
+  exec phpenv-versions --bare
 fi
 
 if [ -n "$1" ]; then
-  export RBENV_VERSION="$1"
-elif [ -z "$RBENV_VERSION" ]; then
-  RBENV_VERSION="$(rbenv-version-name)"
+  export PHPENV_VERSION="$1"
+elif [ -z "$PHPENV_VERSION" ]; then
+  PHPENV_VERSION="$(phpenv-version-name)"
 fi
 
-if [ "$RBENV_VERSION" = "system" ]; then
-  if RUBY_PATH="$(rbenv-which ruby 2>/dev/null)"; then
-    RUBY_PATH="${RUBY_PATH%/*}"
-    RBENV_PREFIX_PATH="${RUBY_PATH%/bin}"
-    echo "${RBENV_PREFIX_PATH:-/}"
+if [ "$PHPENV_VERSION" = "system" ]; then
+  if PHP_PATH="$(phpenv-which php 2>/dev/null)"; then
+    PHP_PATH="${PHP_PATH%/*}"
+    PHPENV_PREFIX_PATH="${PHP_PATH%/bin}"
+    echo "${PHPENV_PREFIX_PATH:-/}"
     exit
   else
-    echo "rbenv: system version not found in PATH" >&2
+    echo "phpenv: system version not found in PATH" >&2
     exit 1
   fi
 fi
 
-RBENV_PREFIX_PATH="${RBENV_ROOT}/versions/${RBENV_VERSION}"
-if [ ! -d "$RBENV_PREFIX_PATH" ]; then
-  echo "rbenv: version \`${RBENV_VERSION}' not installed" >&2
+PHPENV_PREFIX_PATH="${PHPENV_ROOT}/versions/${PHPENV_VERSION}"
+if [ ! -d "$PHPENV_PREFIX_PATH" ]; then
+  echo "phpenv: version \`${PHPENV_VERSION}' not installed" >&2
   exit 1
 fi
 
-echo "$RBENV_PREFIX_PATH"
+echo "$PHPENV_PREFIX_PATH"
