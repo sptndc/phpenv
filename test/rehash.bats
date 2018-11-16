@@ -3,104 +3,104 @@
 load test_helper
 
 create_executable() {
-  local bin="${RBENV_ROOT}/versions/${1}/bin"
+  local bin="${PHPENV_ROOT}/versions/${1}/bin"
   mkdir -p "$bin"
   touch "${bin}/$2"
   chmod +x "${bin}/$2"
 }
 
 @test "empty rehash" {
-  assert [ ! -d "${RBENV_ROOT}/shims" ]
-  run rbenv-rehash
+  assert [ ! -d "${PHPENV_ROOT}/shims" ]
+  run phpenv-rehash
   assert_success ""
-  assert [ -d "${RBENV_ROOT}/shims" ]
-  rmdir "${RBENV_ROOT}/shims"
+  assert [ -d "${PHPENV_ROOT}/shims" ]
+  rmdir "${PHPENV_ROOT}/shims"
 }
 
 @test "non-writable shims directory" {
-  mkdir -p "${RBENV_ROOT}/shims"
-  chmod -w "${RBENV_ROOT}/shims"
-  run rbenv-rehash
-  assert_failure "rbenv: cannot rehash: ${RBENV_ROOT}/shims isn't writable"
+  mkdir -p "${PHPENV_ROOT}/shims"
+  chmod -w "${PHPENV_ROOT}/shims"
+  run phpenv-rehash
+  assert_failure "phpenv: cannot rehash: ${PHPENV_ROOT}/shims isn't writable"
 }
 
 @test "rehash in progress" {
-  mkdir -p "${RBENV_ROOT}/shims"
-  touch "${RBENV_ROOT}/shims/.rbenv-shim"
-  run rbenv-rehash
-  assert_failure "rbenv: cannot rehash: ${RBENV_ROOT}/shims/.rbenv-shim exists"
+  mkdir -p "${PHPENV_ROOT}/shims"
+  touch "${PHPENV_ROOT}/shims/.phpenv-shim"
+  run phpenv-rehash
+  assert_failure "phpenv: cannot rehash: ${PHPENV_ROOT}/shims/.phpenv-shim exists"
 }
 
 @test "creates shims" {
-  create_executable "1.8" "ruby"
-  create_executable "1.8" "rake"
-  create_executable "2.0" "ruby"
-  create_executable "2.0" "rspec"
+  create_executable "7.0" "php"
+  create_executable "7.0" "php-cgi"
+  create_executable "7.2" "php"
+  create_executable "7.2" "phpdbg"
 
-  assert [ ! -e "${RBENV_ROOT}/shims/ruby" ]
-  assert [ ! -e "${RBENV_ROOT}/shims/rake" ]
-  assert [ ! -e "${RBENV_ROOT}/shims/rspec" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/php" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/php-cgi" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/phpdbg" ]
 
-  run rbenv-rehash
+  run phpenv-rehash
   assert_success ""
 
-  run ls "${RBENV_ROOT}/shims"
+  run ls "${PHPENV_ROOT}/shims"
   assert_success
   assert_output <<OUT
-rake
-rspec
-ruby
+php
+php-cgi
+phpdbg
 OUT
 }
 
 @test "removes outdated shims" {
-  mkdir -p "${RBENV_ROOT}/shims"
-  touch "${RBENV_ROOT}/shims/oldshim1"
-  chmod +x "${RBENV_ROOT}/shims/oldshim1"
+  mkdir -p "${PHPENV_ROOT}/shims"
+  touch "${PHPENV_ROOT}/shims/oldshim1"
+  chmod +x "${PHPENV_ROOT}/shims/oldshim1"
 
-  create_executable "2.0" "rake"
-  create_executable "2.0" "ruby"
+  create_executable "7.2" "php"
+  create_executable "7.2" "php-cgi"
 
-  run rbenv-rehash
+  run phpenv-rehash
   assert_success ""
 
-  assert [ ! -e "${RBENV_ROOT}/shims/oldshim1" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/oldshim1" ]
 }
 
 @test "do exact matches when removing stale shims" {
-  create_executable "2.0" "unicorn_rails"
-  create_executable "2.0" "rspec-core"
+  create_executable "7.2" "phpdbg"
+  create_executable "7.2" "phar"
 
-  rbenv-rehash
+  phpenv-rehash
 
-  cp "$RBENV_ROOT"/shims/{rspec-core,rspec}
-  cp "$RBENV_ROOT"/shims/{rspec-core,rails}
-  cp "$RBENV_ROOT"/shims/{rspec-core,uni}
-  chmod +x "$RBENV_ROOT"/shims/{rspec,rails,uni}
+  cp "$PHPENV_ROOT"/shims/{phar,phpcbf}
+  cp "$PHPENV_ROOT"/shims/{phar,phpcs}
+  cp "$PHPENV_ROOT"/shims/{phar,phpunit}
+  chmod +x "$PHPENV_ROOT"/shims/{phpcbf,phpcs,phpunit}
 
-  run rbenv-rehash
+  run phpenv-rehash
   assert_success ""
 
-  assert [ ! -e "${RBENV_ROOT}/shims/rails" ]
-  assert [ ! -e "${RBENV_ROOT}/shims/rake" ]
-  assert [ ! -e "${RBENV_ROOT}/shims/uni" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/phpcbf" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/phpcs" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/phpunit" ]
 }
 
 @test "binary install locations containing spaces" {
-  create_executable "dirname1 p247" "ruby"
-  create_executable "dirname2 preview1" "rspec"
+  create_executable "dirname1 RC1" "php"
+  create_executable "dirname2 beta1" "phpize"
 
-  assert [ ! -e "${RBENV_ROOT}/shims/ruby" ]
-  assert [ ! -e "${RBENV_ROOT}/shims/rspec" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/php" ]
+  assert [ ! -e "${PHPENV_ROOT}/shims/phpize" ]
 
-  run rbenv-rehash
+  run phpenv-rehash
   assert_success ""
 
-  run ls "${RBENV_ROOT}/shims"
+  run ls "${PHPENV_ROOT}/shims"
   assert_success
   assert_output <<OUT
-rspec
-ruby
+php
+phpize
 OUT
 }
 
@@ -111,21 +111,21 @@ echo HELLO="\$(printf ":%s" "\${hellos[@]}")"
 exit
 SH
 
-  IFS=$' \t\n' run rbenv-rehash
+  IFS=$' \t\n' run phpenv-rehash
   assert_success
   assert_output "HELLO=:hello:ugly:world:again"
 }
 
 @test "sh-rehash in bash" {
-  create_executable "2.0" "ruby"
-  RBENV_SHELL=bash run rbenv-sh-rehash
+  create_executable "7.2" "php"
+  PHPENV_SHELL=bash run phpenv-sh-rehash
   assert_success "hash -r 2>/dev/null || true"
-  assert [ -x "${RBENV_ROOT}/shims/ruby" ]
+  assert [ -x "${PHPENV_ROOT}/shims/php" ]
 }
 
 @test "sh-rehash in fish" {
-  create_executable "2.0" "ruby"
-  RBENV_SHELL=fish run rbenv-sh-rehash
+  create_executable "7.2" "php"
+  PHPENV_SHELL=fish run phpenv-sh-rehash
   assert_success ""
-  assert [ -x "${RBENV_ROOT}/shims/ruby" ]
+  assert [ -x "${PHPENV_ROOT}/shims/php" ]
 }

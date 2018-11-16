@@ -3,78 +3,78 @@
 load test_helper
 
 @test "no shell version" {
-  mkdir -p "${RBENV_TEST_DIR}/myproject"
-  cd "${RBENV_TEST_DIR}/myproject"
-  echo "1.2.3" > .ruby-version
-  RBENV_VERSION="" run rbenv-sh-shell
-  assert_failure "rbenv: no shell-specific version configured"
+  mkdir -p "${PHPENV_TEST_DIR}/myproject"
+  cd "${PHPENV_TEST_DIR}/myproject"
+  echo "1.2.3" > .php-version
+  PHPENV_VERSION="" run phpenv-sh-shell
+  assert_failure "phpenv: no shell-specific version configured"
 }
 
 @test "shell version" {
-  RBENV_SHELL=bash RBENV_VERSION="1.2.3" run rbenv-sh-shell
-  assert_success 'echo "$RBENV_VERSION"'
+  PHPENV_SHELL=bash PHPENV_VERSION="1.2.3" run phpenv-sh-shell
+  assert_success 'echo "$PHPENV_VERSION"'
 }
 
 @test "shell version (fish)" {
-  RBENV_SHELL=fish RBENV_VERSION="1.2.3" run rbenv-sh-shell
-  assert_success 'echo "$RBENV_VERSION"'
+  PHPENV_SHELL=fish PHPENV_VERSION="1.2.3" run phpenv-sh-shell
+  assert_success 'echo "$PHPENV_VERSION"'
 }
 
 @test "shell revert" {
-  RBENV_SHELL=bash run rbenv-sh-shell -
+  PHPENV_SHELL=bash run phpenv-sh-shell -
   assert_success
-  assert_line 0 'if [ -n "${RBENV_VERSION_OLD+x}" ]; then'
+  assert_line 0 'if [ -n "${PHPENV_VERSION_OLD+x}" ]; then'
 }
 
 @test "shell revert (fish)" {
-  RBENV_SHELL=fish run rbenv-sh-shell -
+  PHPENV_SHELL=fish run phpenv-sh-shell -
   assert_success
-  assert_line 0 'if set -q RBENV_VERSION_OLD'
+  assert_line 0 'if set -q PHPENV_VERSION_OLD'
 }
 
 @test "shell unset" {
-  RBENV_SHELL=bash run rbenv-sh-shell --unset
+  PHPENV_SHELL=bash run phpenv-sh-shell --unset
   assert_success
   assert_output <<OUT
-RBENV_VERSION_OLD="\$RBENV_VERSION"
-unset RBENV_VERSION
+PHPENV_VERSION_OLD="\$PHPENV_VERSION"
+unset PHPENV_VERSION
 OUT
 }
 
 @test "shell unset (fish)" {
-  RBENV_SHELL=fish run rbenv-sh-shell --unset
+  PHPENV_SHELL=fish run phpenv-sh-shell --unset
   assert_success
   assert_output <<OUT
-set -gu RBENV_VERSION_OLD "\$RBENV_VERSION"
-set -e RBENV_VERSION
+set -gu PHPENV_VERSION_OLD "\$PHPENV_VERSION"
+set -e PHPENV_VERSION
 OUT
 }
 
 @test "shell change invalid version" {
-  run rbenv-sh-shell 1.2.3
+  run phpenv-sh-shell 1.2.3
   assert_failure
   assert_output <<SH
-rbenv: version \`1.2.3' not installed
+phpenv: version \`1.2.3' not installed
 false
 SH
 }
 
 @test "shell change version" {
-  mkdir -p "${RBENV_ROOT}/versions/1.2.3"
-  RBENV_SHELL=bash run rbenv-sh-shell 1.2.3
+  mkdir -p "${PHPENV_ROOT}/versions/1.2.3"
+  PHPENV_SHELL=bash run phpenv-sh-shell 1.2.3
   assert_success
   assert_output <<OUT
-RBENV_VERSION_OLD="\$RBENV_VERSION"
-export RBENV_VERSION="1.2.3"
+PHPENV_VERSION_OLD="\$PHPENV_VERSION"
+export PHPENV_VERSION="1.2.3"
 OUT
 }
 
 @test "shell change version (fish)" {
-  mkdir -p "${RBENV_ROOT}/versions/1.2.3"
-  RBENV_SHELL=fish run rbenv-sh-shell 1.2.3
+  mkdir -p "${PHPENV_ROOT}/versions/1.2.3"
+  PHPENV_SHELL=fish run phpenv-sh-shell 1.2.3
   assert_success
   assert_output <<OUT
-set -gu RBENV_VERSION_OLD "\$RBENV_VERSION"
-set -gx RBENV_VERSION "1.2.3"
+set -gu PHPENV_VERSION_OLD "\$PHPENV_VERSION"
+set -gx PHPENV_VERSION "1.2.3"
 OUT
 }

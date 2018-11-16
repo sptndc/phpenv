@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Usage: phpenv version-file [<dir>]
+# Summary: Detect the file that sets the current phpenv version
+set -e
+[ -n "$PHPENV_DEBUG" ] && set -x
+
+target_dir="$1"
+
+find_local_version_file() {
+  local root="$1"
+  while ! [[ "$root" =~ ^//[^/]*$ ]]; do
+    if [ -e "${root}/.php-version" ]; then
+      echo "${root}/.php-version"
+      return 0
+    fi
+    [ -n "$root" ] || break
+    root="${root%/*}"
+  done
+  return 1
+}
+
+if [ -n "$target_dir" ]; then
+  find_local_version_file "$target_dir"
+else
+  find_local_version_file "$PHPENV_DIR" || {
+    [ "$PHPENV_DIR" != "$PWD" ] && find_local_version_file "$PWD"
+  } || echo "${PHPENV_ROOT}/version"
+fi

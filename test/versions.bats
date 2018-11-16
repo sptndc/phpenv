@@ -3,154 +3,154 @@
 load test_helper
 
 create_version() {
-  mkdir -p "${RBENV_ROOT}/versions/$1"
+  mkdir -p "${PHPENV_ROOT}/versions/$1"
 }
 
 setup() {
-  mkdir -p "$RBENV_TEST_DIR"
-  cd "$RBENV_TEST_DIR"
+  mkdir -p "$PHPENV_TEST_DIR"
+  cd "$PHPENV_TEST_DIR"
 }
 
-stub_system_ruby() {
-  local stub="${RBENV_TEST_DIR}/bin/ruby"
+stub_system_php() {
+  local stub="${PHPENV_TEST_DIR}/bin/php"
   mkdir -p "$(dirname "$stub")"
   touch "$stub" && chmod +x "$stub"
 }
 
 @test "no versions installed" {
-  stub_system_ruby
-  assert [ ! -d "${RBENV_ROOT}/versions" ]
-  run rbenv-versions
-  assert_success "* system (set by ${RBENV_ROOT}/version)"
+  stub_system_php
+  assert [ ! -d "${PHPENV_ROOT}/versions" ]
+  run phpenv-versions
+  assert_success "* system (set by ${PHPENV_ROOT}/version)"
 }
 
-@test "not even system ruby available" {
-  PATH="$(path_without ruby)" run rbenv-versions
+@test "not even system php available" {
+  PATH="$(path_without php)" run phpenv-versions
   assert_failure
-  assert_output "Warning: no Ruby detected on the system"
+  assert_output "Warning: no PHP detected on the system"
 }
 
 @test "bare output no versions installed" {
-  assert [ ! -d "${RBENV_ROOT}/versions" ]
-  run rbenv-versions --bare
+  assert [ ! -d "${PHPENV_ROOT}/versions" ]
+  run phpenv-versions --bare
   assert_success ""
 }
 
 @test "single version installed" {
-  stub_system_ruby
-  create_version "1.9"
-  run rbenv-versions
+  stub_system_php
+  create_version "7.1"
+  run phpenv-versions
   assert_success
   assert_output <<OUT
-* system (set by ${RBENV_ROOT}/version)
-  1.9
+* system (set by ${PHPENV_ROOT}/version)
+  7.1
 OUT
 }
 
 @test "single version bare" {
-  create_version "1.9"
-  run rbenv-versions --bare
-  assert_success "1.9"
+  create_version "7.1"
+  run phpenv-versions --bare
+  assert_success "7.1"
 }
 
 @test "multiple versions" {
-  stub_system_ruby
-  create_version "1.8.7"
-  create_version "1.9.3"
-  create_version "2.0.0"
-  run rbenv-versions
+  stub_system_php
+  create_version "7.0.32"
+  create_version "7.1.23"
+  create_version "7.2.0"
+  run phpenv-versions
   assert_success
   assert_output <<OUT
-* system (set by ${RBENV_ROOT}/version)
-  1.8.7
-  1.9.3
-  2.0.0
+* system (set by ${PHPENV_ROOT}/version)
+  7.0.32
+  7.1.23
+  7.2.0
 OUT
 }
 
 @test "indicates current version" {
-  stub_system_ruby
-  create_version "1.9.3"
-  create_version "2.0.0"
-  RBENV_VERSION=1.9.3 run rbenv-versions
+  stub_system_php
+  create_version "7.1.23"
+  create_version "7.2.0"
+  PHPENV_VERSION=7.1.23 run phpenv-versions
   assert_success
   assert_output <<OUT
   system
-* 1.9.3 (set by RBENV_VERSION environment variable)
-  2.0.0
+* 7.1.23 (set by PHPENV_VERSION environment variable)
+  7.2.0
 OUT
 }
 
 @test "bare doesn't indicate current version" {
-  create_version "1.9.3"
-  create_version "2.0.0"
-  RBENV_VERSION=1.9.3 run rbenv-versions --bare
+  create_version "7.1.23"
+  create_version "7.2.0"
+  PHPENV_VERSION=7.1.23 run phpenv-versions --bare
   assert_success
   assert_output <<OUT
-1.9.3
-2.0.0
+7.1.23
+7.2.0
 OUT
 }
 
 @test "globally selected version" {
-  stub_system_ruby
-  create_version "1.9.3"
-  create_version "2.0.0"
-  cat > "${RBENV_ROOT}/version" <<<"1.9.3"
-  run rbenv-versions
+  stub_system_php
+  create_version "7.1.23"
+  create_version "7.2.0"
+  cat > "${PHPENV_ROOT}/version" <<<"7.1.23"
+  run phpenv-versions
   assert_success
   assert_output <<OUT
   system
-* 1.9.3 (set by ${RBENV_ROOT}/version)
-  2.0.0
+* 7.1.23 (set by ${PHPENV_ROOT}/version)
+  7.2.0
 OUT
 }
 
 @test "per-project version" {
-  stub_system_ruby
-  create_version "1.9.3"
-  create_version "2.0.0"
-  cat > ".ruby-version" <<<"1.9.3"
-  run rbenv-versions
+  stub_system_php
+  create_version "7.1.23"
+  create_version "7.2.0"
+  cat > ".php-version" <<<"7.1.23"
+  run phpenv-versions
   assert_success
   assert_output <<OUT
   system
-* 1.9.3 (set by ${RBENV_TEST_DIR}/.ruby-version)
-  2.0.0
+* 7.1.23 (set by ${PHPENV_TEST_DIR}/.php-version)
+  7.2.0
 OUT
 }
 
 @test "ignores non-directories under versions" {
-  create_version "1.9"
-  touch "${RBENV_ROOT}/versions/hello"
+  create_version "7.1"
+  touch "${PHPENV_ROOT}/versions/hello"
 
-  run rbenv-versions --bare
-  assert_success "1.9"
+  run phpenv-versions --bare
+  assert_success "7.1"
 }
 
 @test "lists symlinks under versions" {
-  create_version "1.8.7"
-  ln -s "1.8.7" "${RBENV_ROOT}/versions/1.8"
+  create_version "7.0.32"
+  ln -s "7.0.32" "${PHPENV_ROOT}/versions/7.0"
 
-  run rbenv-versions --bare
+  run phpenv-versions --bare
   assert_success
   assert_output <<OUT
-1.8
-1.8.7
+7.0
+7.0.32
 OUT
 }
 
 @test "doesn't list symlink aliases when --skip-aliases" {
-  create_version "1.8.7"
-  ln -s "1.8.7" "${RBENV_ROOT}/versions/1.8"
+  create_version "7.0.32"
+  ln -s "7.0.32" "${PHPENV_ROOT}/versions/7.0"
   mkdir moo
-  ln -s "${PWD}/moo" "${RBENV_ROOT}/versions/1.9"
+  ln -s "${PWD}/moo" "${PHPENV_ROOT}/versions/7.1"
 
-  run rbenv-versions --bare --skip-aliases
+  run phpenv-versions --bare --skip-aliases
   assert_success
 
   assert_output <<OUT
-1.8.7
-1.9
+7.0.32
+7.1
 OUT
 }
