@@ -2,17 +2,17 @@
 #
 # Summary: Display the full path to an executable
 #
-# Usage: rbenv which <command>
+# Usage: phpenv which <command>
 #
-# Displays the full path to the executable that rbenv will invoke when
+# Displays the full path to the executable that phpenv will invoke when
 # you run the given command.
 
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
-  exec rbenv-shims --short
+  exec phpenv-shims --short
 fi
 
 remove_from_path() {
@@ -27,41 +27,41 @@ remove_from_path() {
   echo "${result#:}"
 }
 
-RBENV_COMMAND="$1"
+PHPENV_COMMAND="$1"
 
-if [ -z "$RBENV_COMMAND" ]; then
-  rbenv-help --usage which >&2
+if [ -z "$PHPENV_COMMAND" ]; then
+  phpenv-help --usage which >&2
   exit 1
 fi
 
-RBENV_VERSION="${RBENV_VERSION:-$(rbenv-version-name)}"
+PHPENV_VERSION="${PHPENV_VERSION:-$(phpenv-version-name)}"
 
-if [ "$RBENV_VERSION" = "system" ]; then
-  PATH="$(remove_from_path "${RBENV_ROOT}/shims")" \
-    RBENV_COMMAND_PATH="$(command -v "$RBENV_COMMAND" || true)"
+if [ "$PHPENV_VERSION" = "system" ]; then
+  PATH="$(remove_from_path "${PHPENV_ROOT}/shims")" \
+    PHPENV_COMMAND_PATH="$(command -v "$PHPENV_COMMAND" || true)"
 else
-  RBENV_COMMAND_PATH="${RBENV_ROOT}/versions/${RBENV_VERSION}/bin/${RBENV_COMMAND}"
+  PHPENV_COMMAND_PATH="${PHPENV_ROOT}/versions/${PHPENV_VERSION}/bin/${PHPENV_COMMAND}"
 fi
 
 OLDIFS="$IFS"
-IFS=$'\n' scripts=(`rbenv-hooks which`)
+IFS=$'\n' scripts=(`phpenv-hooks which`)
 IFS="$OLDIFS"
 for script in "${scripts[@]}"; do
   source "$script"
 done
 
-if [ -x "$RBENV_COMMAND_PATH" ]; then
-  echo "$RBENV_COMMAND_PATH"
-elif [ "$RBENV_VERSION" != "system" ] && [ ! -d "${RBENV_ROOT}/versions/${RBENV_VERSION}" ]; then
-  echo "rbenv: version \`$RBENV_VERSION' is not installed (set by $(rbenv-version-origin))" >&2
+if [ -x "$PHPENV_COMMAND_PATH" ]; then
+  echo "$PHPENV_COMMAND_PATH"
+elif [ "$PHPENV_VERSION" != "system" ] && [ ! -d "${PHPENV_ROOT}/versions/${PHPENV_VERSION}" ]; then
+  echo "phpenv: version \`$PHPENV_VERSION' is not installed (set by $(phpenv-version-origin))" >&2
   exit 1
 else
-  echo "rbenv: $RBENV_COMMAND: command not found" >&2
+  echo "phpenv: $PHPENV_COMMAND: command not found" >&2
 
-  versions="$(rbenv-whence "$RBENV_COMMAND" || true)"
+  versions="$(phpenv-whence "$PHPENV_COMMAND" || true)"
   if [ -n "$versions" ]; then
     { echo
-      echo "The \`$1' command exists in these Ruby versions:"
+      echo "The \`$1' command exists in these PHP versions:"
       echo "$versions" | sed 's/^/  /g'
       echo
     } >&2

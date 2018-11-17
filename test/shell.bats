@@ -3,14 +3,14 @@
 load test_helper
 
 @test "shell integration disabled" {
-  run rbenv shell
-  assert_failure "rbenv: shell integration not enabled. Run \`rbenv init' for instructions."
+  run phpenv shell
+  assert_failure "phpenv: shell integration not enabled. Run \`phpenv init' for instructions."
 }
 
 @test "shell integration enabled" {
-  eval "$(rbenv init -)"
-  run rbenv shell
-  assert_success "rbenv: no shell-specific version configured"
+  eval "$(phpenv init -)"
+  run phpenv shell
+  assert_success "phpenv: no shell-specific version configured"
 }
 
 @test "no shell version" {
