@@ -3,8 +3,8 @@
 load test_helper
 
 setup() {
-  mkdir -p "$RBENV_TEST_DIR"
-  cd "$RBENV_TEST_DIR"
+  mkdir -p "$PHPENV_TEST_DIR"
+  cd "$PHPENV_TEST_DIR"
 }
 
 create_file() {
@@ -13,63 +13,63 @@ create_file() {
 }
 
 @test "detects global 'version' file" {
-  create_file "${RBENV_ROOT}/version"
-  run rbenv-version-file
-  assert_success "${RBENV_ROOT}/version"
+  create_file "${PHPENV_ROOT}/version"
+  run phpenv-version-file
+  assert_success "${PHPENV_ROOT}/version"
 }
 
 @test "prints global file if no version files exist" {
-  assert [ ! -e "${RBENV_ROOT}/version" ]
-  assert [ ! -e ".ruby-version" ]
-  run rbenv-version-file
-  assert_success "${RBENV_ROOT}/version"
+  assert [ ! -e "${PHPENV_ROOT}/version" ]
+  assert [ ! -e ".php-version" ]
+  run phpenv-version-file
+  assert_success "${PHPENV_ROOT}/version"
 }
 
 @test "in current directory" {
-  create_file ".ruby-version"
-  run rbenv-version-file
-  assert_success "${RBENV_TEST_DIR}/.ruby-version"
+  create_file ".php-version"
+  run phpenv-version-file
+  assert_success "${PHPENV_TEST_DIR}/.php-version"
 }
 
 @test "in parent directory" {
-  create_file ".ruby-version"
+  create_file ".php-version"
   mkdir -p project
   cd project
-  run rbenv-version-file
-  assert_success "${RBENV_TEST_DIR}/.ruby-version"
+  run phpenv-version-file
+  assert_success "${PHPENV_TEST_DIR}/.php-version"
 }
 
 @test "topmost file has precedence" {
-  create_file ".ruby-version"
-  create_file "project/.ruby-version"
+  create_file ".php-version"
+  create_file "project/.php-version"
   cd project
-  run rbenv-version-file
-  assert_success "${RBENV_TEST_DIR}/project/.ruby-version"
+  run phpenv-version-file
+  assert_success "${PHPENV_TEST_DIR}/project/.php-version"
 }
 
-@test "RBENV_DIR has precedence over PWD" {
-  create_file "widget/.ruby-version"
-  create_file "project/.ruby-version"
+@test "PHPENV_DIR has precedence over PWD" {
+  create_file "widget/.php-version"
+  create_file "project/.php-version"
   cd project
-  RBENV_DIR="${RBENV_TEST_DIR}/widget" run rbenv-version-file
-  assert_success "${RBENV_TEST_DIR}/widget/.ruby-version"
+  PHPENV_DIR="${PHPENV_TEST_DIR}/widget" run phpenv-version-file
+  assert_success "${PHPENV_TEST_DIR}/widget/.php-version"
 }
 
-@test "PWD is searched if RBENV_DIR yields no results" {
+@test "PWD is searched if PHPENV_DIR yields no results" {
   mkdir -p "widget/blank"
-  create_file "project/.ruby-version"
+  create_file "project/.php-version"
   cd project
-  RBENV_DIR="${RBENV_TEST_DIR}/widget/blank" run rbenv-version-file
-  assert_success "${RBENV_TEST_DIR}/project/.ruby-version"
+  PHPENV_DIR="${PHPENV_TEST_DIR}/widget/blank" run phpenv-version-file
+  assert_success "${PHPENV_TEST_DIR}/project/.php-version"
 }
 
 @test "finds version file in target directory" {
-  create_file "project/.ruby-version"
-  run rbenv-version-file "${PWD}/project"
-  assert_success "${RBENV_TEST_DIR}/project/.ruby-version"
+  create_file "project/.php-version"
+  run phpenv-version-file "${PWD}/project"
+  assert_success "${PHPENV_TEST_DIR}/project/.php-version"
 }
 
 @test "fails when no version file in target directory" {
-  run rbenv-version-file "$PWD"
+  run phpenv-version-file "$PWD"
   assert_failure ""
 }

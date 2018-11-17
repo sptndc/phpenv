@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$PHPENV_DEBUG" ] && set -x
 
-# Provide rbenv completions
+# Provide phpenv completions
 if [ "$1" = "--complete" ]; then
-  exec rbenv-rehash --complete
+  exec phpenv-rehash --complete
 fi
 
-shell="$(basename "${RBENV_SHELL:-$SHELL}")"
+shell="$(basename "${PHPENV_SHELL:-$SHELL}")"
 
-# When rbenv shell integration is enabled, delegate to rbenv-rehash,
+# When phpenv shell integration is enabled, delegate to phpenv-rehash,
 # then tell the shell to empty its command lookup cache.
-rbenv-rehash
+phpenv-rehash
 
 case "$shell" in
 fish )

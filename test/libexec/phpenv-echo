@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: rbenv echo [-F<char>] VAR
+# Usage: phpenv echo [-F<char>] VAR
 
 if [[ $1 == -F* ]]; then
   sep="${1:2}"

@@ -3,43 +3,43 @@
 load test_helper
 
 @test "prefix" {
-  mkdir -p "${RBENV_TEST_DIR}/myproject"
-  cd "${RBENV_TEST_DIR}/myproject"
-  echo "1.2.3" > .ruby-version
-  mkdir -p "${RBENV_ROOT}/versions/1.2.3"
-  run rbenv-prefix
-  assert_success "${RBENV_ROOT}/versions/1.2.3"
+  mkdir -p "${PHPENV_TEST_DIR}/myproject"
+  cd "${PHPENV_TEST_DIR}/myproject"
+  echo "1.2.3" > .php-version
+  mkdir -p "${PHPENV_ROOT}/versions/1.2.3"
+  run phpenv-prefix
+  assert_success "${PHPENV_ROOT}/versions/1.2.3"
 }
 
 @test "prefix for invalid version" {
-  RBENV_VERSION="1.2.3" run rbenv-prefix
-  assert_failure "rbenv: version \`1.2.3' not installed"
+  PHPENV_VERSION="1.2.3" run phpenv-prefix
+  assert_failure "phpenv: version \`1.2.3' not installed"
 }
 
 @test "prefix for system" {
-  mkdir -p "${RBENV_TEST_DIR}/bin"
-  touch "${RBENV_TEST_DIR}/bin/ruby"
-  chmod +x "${RBENV_TEST_DIR}/bin/ruby"
-  RBENV_VERSION="system" run rbenv-prefix
-  assert_success "$RBENV_TEST_DIR"
+  mkdir -p "${PHPENV_TEST_DIR}/bin"
+  touch "${PHPENV_TEST_DIR}/bin/php"
+  chmod +x "${PHPENV_TEST_DIR}/bin/php"
+  PHPENV_VERSION="system" run phpenv-prefix
+  assert_success "$PHPENV_TEST_DIR"
 }
 
 @test "prefix for system in /" {
   mkdir -p "${BATS_TEST_DIRNAME}/libexec"
-  cat >"${BATS_TEST_DIRNAME}/libexec/rbenv-which" <<OUT
+  cat >"${BATS_TEST_DIRNAME}/libexec/phpenv-which" <<OUT
 #!/bin/sh
-echo /bin/ruby
+echo /bin/php
 OUT
-  chmod +x "${BATS_TEST_DIRNAME}/libexec/rbenv-which"
-  RBENV_VERSION="system" run rbenv-prefix
+  chmod +x "${BATS_TEST_DIRNAME}/libexec/phpenv-which"
+  PHPENV_VERSION="system" run phpenv-prefix
   assert_success "/"
-  rm -f "${BATS_TEST_DIRNAME}/libexec/rbenv-which"
+  rm -f "${BATS_TEST_DIRNAME}/libexec/phpenv-which"
 }
 
 @test "prefix for invalid system" {
-  PATH="$(path_without ruby)" run rbenv-prefix system
+  PATH="$(path_without php)" run phpenv-prefix system
   assert_failure <<EOF
-rbenv: ruby: command not found
-rbenv: system version not found in PATH"
+phpenv: php: command not found
+phpenv: system version not found in PATH"
 EOF
 }

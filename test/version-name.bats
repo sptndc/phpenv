@@ -3,32 +3,32 @@
 load test_helper
 
 create_version() {
-  mkdir -p "${RBENV_ROOT}/versions/$1"
+  mkdir -p "${PHPENV_ROOT}/versions/$1"
 }
 
 setup() {
-  mkdir -p "$RBENV_TEST_DIR"
-  cd "$RBENV_TEST_DIR"
+  mkdir -p "$PHPENV_TEST_DIR"
+  cd "$PHPENV_TEST_DIR"
 }
 
 @test "no version selected" {
-  assert [ ! -d "${RBENV_ROOT}/versions" ]
-  run rbenv-version-name
+  assert [ ! -d "${PHPENV_ROOT}/versions" ]
+  run phpenv-version-name
   assert_success "system"
 }
 
 @test "system version is not checked for existance" {
-  RBENV_VERSION=system run rbenv-version-name
+  PHPENV_VERSION=system run phpenv-version-name
   assert_success "system"
 }
 
-@test "RBENV_VERSION can be overridden by hook" {
-  create_version "1.8.7"
-  create_version "1.9.3"
-  create_hook version-name test.bash <<<"RBENV_VERSION=1.9.3"
+@test "PHPENV_VERSION can be overridden by hook" {
+  create_version "7.0.32"
+  create_version "7.1.23"
+  create_hook version-name test.bash <<<"PHPENV_VERSION=7.1.23"
 
-  RBENV_VERSION=1.8.7 run rbenv-version-name
-  assert_success "1.9.3"
+  PHPENV_VERSION=7.0.32 run phpenv-version-name
+  assert_success "7.1.23"
 }
 
 @test "carries original IFS within hooks" {
@@ -37,46 +37,46 @@ hellos=(\$(printf "hello\\tugly world\\nagain"))
 echo HELLO="\$(printf ":%s" "\${hellos[@]}")"
 SH
 
-  export RBENV_VERSION=system
-  IFS=$' \t\n' run rbenv-version-name env
+  export PHPENV_VERSION=system
+  IFS=$' \t\n' run phpenv-version-name env
   assert_success
   assert_line "HELLO=:hello:ugly:world:again"
 }
 
-@test "RBENV_VERSION has precedence over local" {
-  create_version "1.8.7"
-  create_version "1.9.3"
+@test "PHPENV_VERSION has precedence over local" {
+  create_version "7.0.32"
+  create_version "7.1.23"
 
-  cat > ".ruby-version" <<<"1.8.7"
-  run rbenv-version-name
-  assert_success "1.8.7"
+  cat > ".php-version" <<<"7.0.32"
+  run phpenv-version-name
+  assert_success "7.0.32"
 
-  RBENV_VERSION=1.9.3 run rbenv-version-name
-  assert_success "1.9.3"
+  PHPENV_VERSION=7.1.23 run phpenv-version-name
+  assert_success "7.1.23"
 }
 
 @test "local file has precedence over global" {
-  create_version "1.8.7"
-  create_version "1.9.3"
+  create_version "7.0.32"
+  create_version "7.1.23"
 
-  cat > "${RBENV_ROOT}/version" <<<"1.8.7"
-  run rbenv-version-name
-  assert_success "1.8.7"
+  cat > "${PHPENV_ROOT}/version" <<<"7.0.32"
+  run phpenv-version-name
+  assert_success "7.0.32"
 
-  cat > ".ruby-version" <<<"1.9.3"
-  run rbenv-version-name
-  assert_success "1.9.3"
+  cat > ".php-version" <<<"7.1.23"
+  run phpenv-version-name
+  assert_success "7.1.23"
 }
 
 @test "missing version" {
-  RBENV_VERSION=1.2 run rbenv-version-name
-  assert_failure "rbenv: version \`1.2' is not installed (set by RBENV_VERSION environment variable)"
+  PHPENV_VERSION=1.2 run phpenv-version-name
+  assert_failure "phpenv: version \`1.2' is not installed (set by PHPENV_VERSION environment variable)"
 }
 
 @test "version with prefix in name" {
-  create_version "1.8.7"
-  cat > ".ruby-version" <<<"ruby-1.8.7"
-  run rbenv-version-name
+  create_version "7.0.32"
+  cat > ".php-version" <<<"php-7.0.32"
+  run phpenv-version-name
   assert_success
-  assert_output "1.8.7"
+  assert_output "7.0.32"
 }
