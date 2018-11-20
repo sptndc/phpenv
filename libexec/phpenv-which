@@ -4,8 +4,8 @@
 #
 # Usage: phpenv which <command>
 #
-# Displays the full path to the executable that phpenv will invoke when
-# you run the given command.
+# Displays the full path to the executable that phpenv will invoke
+# when you run the given command.
 
 set -e
 [ -n "$PHPENV_DEBUG" ] && set -x

@@ -10,12 +10,13 @@
 # environment variable in your shell. This version overrides local
 # application-specific versions and the global version.
 #
-# <version> should be a string matching a PHP version known to phpenv.
-# The special version string `system' will use your default system PHP.
-# Run `phpenv versions' for a list of available PHP versions.
+# <version> should be a string matching a PHP version known to
+# phpenv. The special version string `system' will use your default
+# system PHP. Run `phpenv versions' for a list of available PHP
+# versions.
 #
-# When `-` is passed instead of the version string, the previously set
-# version will be restored. With `--unset`, the `PHPENV_VERSION`
+# When `-` is passed instead of the version string, the previously
+# set version will be restored. With `--unset`, the `PHPENV_VERSION`
 # environment variable gets unset, restoring the environment to the
 # state before the first `phpenv shell` call.
 

@@ -2,13 +2,13 @@
 #
 # Summary: Display help for a command
 #
-# Usage: phpenv help [--usage] COMMAND
+# Usage: phpenv help [--usage] <command>
 #
 # Parses and displays help contents from a command's source file.
 #
-# A command is considered documented if it starts with a comment block
-# that has a `Summary:' or `Usage:' section. Usage instructions can
-# span multiple lines as long as subsequent lines are indented.
+# A command is considered documented if it starts with a comment
+# block that has a `Summary:' or `Usage:' section. Usage instructions
+# can span multiple lines as long as subsequent lines are indented.
 # The remainder of the comment block is displayed as extended
 # documentation.
 

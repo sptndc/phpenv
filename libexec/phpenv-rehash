@@ -12,8 +12,8 @@ mkdir -p "$SHIM_PATH"
 
 # Ensure only one instance of phpenv-rehash is running at a time by
 # setting the shell's `noclobber` option and attempting to write to
-# the prototype shim file. If the file already exists, print a warning
-# to stderr and exit with a non-zero status.
+# the prototype shim file. If the file already exists, print a
+# warning to stderr and exit with a non-zero status.
 set -o noclobber
 { echo > "$PROTOTYPE_SHIM_PATH"
 } 2>| /dev/null ||
@@ -91,8 +91,8 @@ list_executable_names() {
 }
 
 # The basename of each argument passed to `make_shims` will be
-# registered for installation as a shim. In this way, plugins may call
-# `make_shims` with a glob to register many shims at once.
+# registered for installation as a shim. In this way, plugins may
+# call `make_shims` with a glob to register many shims at once.
 make_shims() {
   local file shim
   for file; do
@@ -108,7 +108,8 @@ register_shim() {
   registered_shims="${registered_shims}${1} "
 }
 
-# Install all the shims registered via `make_shims` or `register_shim` directly.
+# Install all the shims registered via `make_shims` or
+# `register_shim` directly.
 install_registered_shims() {
   local shim file
   for shim in $registered_shims; do
@@ -117,10 +118,10 @@ install_registered_shims() {
   done
 }
 
-# Once the registered shims have been installed, we make a second pass
-# over the contents of the shims directory. Any file that is present
-# in the directory but has not been registered as a shim should be
-# removed.
+# Once the registered shims have been installed, we make a second
+# pass over the contents of the shims directory. Any file that is
+# present in the directory but has not been registered as a shim
+# should be removed.
 remove_stale_shims() {
   local shim
   for shim in "$SHIM_PATH"/*; do
