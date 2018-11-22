@@ -9,9 +9,11 @@ if [ -z "$PHPENV_VERSION" ]; then
 fi
 
 OLDIFS="$IFS"
-IFS=$'\n' scripts=(`phpenv-hooks version-name`)
+IFS=$'\n' scripts=($(phpenv-hooks version-name))
 IFS="$OLDIFS"
 for script in "${scripts[@]}"; do
+  # Don't need shellcheck to follow this `source`.
+  # shellcheck disable=SC1090
   source "$script"
 done
 

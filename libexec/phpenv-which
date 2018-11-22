@@ -44,9 +44,11 @@ else
 fi
 
 OLDIFS="$IFS"
-IFS=$'\n' scripts=(`phpenv-hooks which`)
+IFS=$'\n' scripts=($(phpenv-hooks which))
 IFS="$OLDIFS"
 for script in "${scripts[@]}"; do
+  # Don't need shellcheck to follow this `source`.
+  # shellcheck disable=SC1090
   source "$script"
 done
 
@@ -62,7 +64,7 @@ else
   if [ -n "$versions" ]; then
     { echo
       echo "The \`$1' command exists in these PHP versions:"
-      echo "$versions" | sed 's/^/  /g'
+      echo -e "$versions" | sed 's/^/  /g'
       echo
     } >&2
   fi

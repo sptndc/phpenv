@@ -46,19 +46,19 @@ if [ -z "$print" ]; then
   case "$shell" in
   bash )
     if [ -f "${HOME}/.bashrc" ] && [ ! -f "${HOME}/.bash_profile" ]; then
-      profile='~/.bashrc'
+      profile="${HOME}/.bashrc"
     else
-      profile='~/.bash_profile'
+      profile="${HOME}/.bash_profile"
     fi
     ;;
   zsh )
-    profile='~/.zshrc'
+    profile="${HOME}/.zshrc"
     ;;
   ksh )
-    profile='~/.profile'
+    profile="${HOME}/.profile"
     ;;
   fish )
-    profile='~/.config/fish/config.fish'
+    profile="${HOME}/.config/fish/config.fish"
     ;;
   * )
     profile='your profile'
@@ -73,7 +73,7 @@ if [ -z "$print" ]; then
       echo 'status --is-interactive; and source (phpenv init -|psub)'
       ;;
     * )
-      echo 'eval "$(phpenv init -)"'
+      echo "eval \"\$(phpenv init -)\""
       ;;
     esac
     echo
@@ -90,7 +90,7 @@ fish )
   echo "set -gx PHPENV_SHELL $shell"
 ;;
 * )
-  echo 'export PATH="'${PHPENV_ROOT}'/shims:${PATH}"'
+  echo "export PATH=\"${PHPENV_ROOT}/shims:\${PATH}\""
   echo "export PHPENV_SHELL=$shell"
 ;;
 esac
@@ -104,7 +104,7 @@ if [ -z "$no_rehash" ]; then
   echo 'command phpenv rehash 2>/dev/null'
 fi
 
-commands=(`phpenv-commands --sh`)
+commands=($(phpenv-commands --sh))
 case "$shell" in
 fish )
   cat <<EOS

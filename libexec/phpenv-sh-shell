@@ -38,7 +38,7 @@ if [ -z "$version" ]; then
     echo "phpenv: no shell-specific version configured" >&2
     exit 1
   else
-    echo 'echo "$PHPENV_VERSION"'
+    echo "echo \"\$PHPENV_VERSION\""
     exit
   fi
 fi
@@ -46,11 +46,11 @@ fi
 if [ "$version" = "--unset" ]; then
   case "$shell" in
   fish )
-    echo 'set -gu PHPENV_VERSION_OLD "$PHPENV_VERSION"'
+    echo "set -gu PHPENV_VERSION_OLD \"\$PHPENV_VERSION\""
     echo "set -e PHPENV_VERSION"
     ;;
   * )
-    echo 'PHPENV_VERSION_OLD="$PHPENV_VERSION"'
+    echo "PHPENV_VERSION_OLD=\"\$PHPENV_VERSION\""
     echo "unset PHPENV_VERSION"
     ;;
   esac
@@ -104,11 +104,11 @@ if phpenv-prefix "$version" >/dev/null; then
   if [ "$version" != "$PHPENV_VERSION" ]; then
     case "$shell" in
     fish )
-      echo 'set -gu PHPENV_VERSION_OLD "$PHPENV_VERSION"'
+      echo "set -gu PHPENV_VERSION_OLD \"\$PHPENV_VERSION\""
       echo "set -gx PHPENV_VERSION \"$version\""
       ;;
     * )
-      echo 'PHPENV_VERSION_OLD="$PHPENV_VERSION"'
+      echo "PHPENV_VERSION_OLD=\"\$PHPENV_VERSION\""
       echo "export PHPENV_VERSION=\"$version\""
       ;;
     esac

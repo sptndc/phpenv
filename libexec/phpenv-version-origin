@@ -6,9 +6,11 @@ set -e
 unset PHPENV_VERSION_ORIGIN
 
 OLDIFS="$IFS"
-IFS=$'\n' scripts=(`phpenv-hooks version-origin`)
+IFS=$'\n' scripts=($(phpenv-hooks version-origin))
 IFS="$OLDIFS"
 for script in "${scripts[@]}"; do
+  # Don't need shellcheck to follow this `source`.
+  # shellcheck disable=SC1090
   source "$script"
 done
 

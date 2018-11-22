@@ -34,9 +34,11 @@ PHPENV_COMMAND_PATH="$(phpenv-which "$PHPENV_COMMAND")"
 PHPENV_BIN_PATH="${PHPENV_COMMAND_PATH%/*}"
 
 OLDIFS="$IFS"
-IFS=$'\n' scripts=(`phpenv-hooks exec`)
+IFS=$'\n' scripts=($(phpenv-hooks exec))
 IFS="$OLDIFS"
 for script in "${scripts[@]}"; do
+  # Don't need shellcheck to follow this `source`.
+  # shellcheck disable=SC1090
   source "$script"
 done
 
