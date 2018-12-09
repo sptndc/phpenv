@@ -21,10 +21,11 @@ fi
 whence() {
   local command="$1"
   phpenv-versions --bare | while read -r version; do
-    path="$(phpenv-prefix "$version")/bin/${command}"
-    if [ -x "$path" ]; then
-      [ "$print_paths" ] && echo "$path" || echo "$version"
-    fi
+    for path in "$(phpenv-prefix "$version")/"*bin/"${command}"; do
+      if [ -x "$path" ]; then
+        [ "$print_paths" ] && echo "$path" || echo "$version"
+      fi
+    done
   done
 }
 

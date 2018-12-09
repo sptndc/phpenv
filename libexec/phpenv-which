@@ -40,7 +40,9 @@ if [ "$PHPENV_VERSION" = "system" ]; then
   PATH="$(remove_from_path "${PHPENV_ROOT}/shims")" \
     PHPENV_COMMAND_PATH="$(command -v "$PHPENV_COMMAND" || true)"
 else
-  PHPENV_COMMAND_PATH="${PHPENV_ROOT}/versions/${PHPENV_VERSION}/bin/${PHPENV_COMMAND}"
+  for COMMAND in "${PHPENV_ROOT}/versions/${PHPENV_VERSION}/"*bin/"${PHPENV_COMMAND}"; do
+    PHPENV_COMMAND_PATH="$COMMAND"
+  done
 fi
 
 OLDIFS="$IFS"
