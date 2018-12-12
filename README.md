@@ -1,5 +1,7 @@
 # Groom your app’s PHP environment with phpenv.
 
+[![Travis CI](https://img.shields.io/travis/sptndc/phpenv.svg?logo=travis-ci)](https://travis-ci.org/sptndc/phpenv)
+
 Use phpenv to pick a PHP version for your application and guarantee
 that your development environment matches production. Put phpenv to
 work with [Composer](https://getcomposer.org/) for painless PHP
