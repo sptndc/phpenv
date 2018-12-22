@@ -24,7 +24,7 @@ upgrades and bulletproof deployments.
   you tailor it to suit your needs. Compile your own PHP versions, or
   use the [php-build][] plugin to automate the process.
 
-This project was forked from [rbenv](https://github.com/rbenv/rbenv),
+> This project was forked from [rbenv](https://github.com/rbenv/rbenv),
 and modified for PHP.
 
 ## Table of Contents
@@ -155,7 +155,7 @@ needing a systemwide install.
     Optionally, try to compile dynamic bash extension to speed up
     phpenv. Don't worry if it fails; phpenv will still work normally:
 
-    ~~~
+    ~~~ sh
     $ cd ~/.phpenv && src/configure && make -C src
     ~~~
 
@@ -420,4 +420,4 @@ Please feel free to submit pull requests and file bugs on the [issue
 tracker](https://github.com/sptndc/phpenv/issues).
 
 
-  [php-build]: https://github.com/sptndc/php-build#readme
+  [php-build]: https://github.com/php-build/php-build#readme
